@@ -10,33 +10,63 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AProposRouteImport } from './routes/a-propos'
+import { Route as PreinscriptionRouteImport } from './routes/preinscription'
+import { Route as VieScolaireRouteImport } from './routes/vie-scolaire'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AProposRoute = AProposRouteImport.update({
+  id: '/a-propos',
+  path: '/a-propos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PreinscriptionRoute = PreinscriptionRouteImport.update({
+  id: '/preinscription',
+  path: '/preinscription',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VieScolaireRoute = VieScolaireRouteImport.update({
+  id: '/vie-scolaire',
+  path: '/vie-scolaire',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
+  '/preinscription': typeof PreinscriptionRoute
+  '/vie-scolaire': typeof VieScolaireRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
+  '/preinscription': typeof PreinscriptionRoute
+  '/vie-scolaire': typeof VieScolaireRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
+  '/preinscription': typeof PreinscriptionRoute
+  '/vie-scolaire': typeof VieScolaireRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/a-propos' | '/preinscription' | '/vie-scolaire'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/a-propos' | '/preinscription' | '/vie-scolaire'
+  id: '__root__' | '/' | '/a-propos' | '/preinscription' | '/vie-scolaire'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AProposRoute: typeof AProposRoute
+  PreinscriptionRoute: typeof PreinscriptionRoute
+  VieScolaireRoute: typeof VieScolaireRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +78,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/a-propos': {
+      id: '/a-propos'
+      path: '/a-propos'
+      fullPath: '/a-propos'
+      preLoaderRoute: typeof AProposRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/preinscription': {
+      id: '/preinscription'
+      path: '/preinscription'
+      fullPath: '/preinscription'
+      preLoaderRoute: typeof PreinscriptionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vie-scolaire': {
+      id: '/vie-scolaire'
+      path: '/vie-scolaire'
+      fullPath: '/vie-scolaire'
+      preLoaderRoute: typeof VieScolaireRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AProposRoute: AProposRoute,
+  PreinscriptionRoute: PreinscriptionRoute,
+  VieScolaireRoute: VieScolaireRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
