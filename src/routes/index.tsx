@@ -1,24 +1,67 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { ArrowLeft, ArrowRight, Baby, BookOpen, Bot, Bus, ChevronRight, Drama, GraduationCap, HeartHandshake, Languages, Leaf, Lightbulb, Medal, Music, Palette, Quote, ShieldCheck, Sparkles, Sprout, Trophy, Users, Waves, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { SectionHeading } from "@/components/site-shell";
+import hero from "@/assets/angello-hero.jpg";
+import team from "@/assets/angello-team.jpg";
+import bus from "@/assets/angello-bus.jpg";
+import activities from "@/assets/angello-activities.jpg";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({ meta: [
+    { title: "ANGELLO School — École bilingue à Japoma, Douala" },
+    { name: "description", content: "Crèche, garderie, maternelle et primaire bilingues à Japoma. 100% de réussite au CEP depuis 3 ans." },
+    { property: "og:title", content: "ANGELLO School — Grandir en deux langues" },
+    { property: "og:description", content: "Une école bilingue d’excellence à Japoma, Douala." },
+    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
+  ], links: [{ rel: "canonical", href: "/" }] }), component: HomePage,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
+const advantages = [
+  [Medal,"Excellence académique","Un suivi rigoureux qui révèle le potentiel de chaque enfant."],
+  [Languages,"Bilinguisme réel","Le français et l’anglais sont vécus au quotidien, dès le plus jeune âge."],
+  [Sparkles,"Activités variées","Un programme riche pour cultiver les talents au-delà de la classe."],
+  [ShieldCheck,"Transport sécurisé","Des trajets confortables, organisés et encadrés avec attention."],
+  [HeartHandshake,"Équipe passionnée","25 enseignants qualifiés, engagés auprès de chaque élève."],
+  [Sprout,"Cadre bienveillant","Un environnement positif où apprendre rime avec confiance."],
+] as const;
+const levels = [[Baby,"Crèche","Un cocon sécurisant pour les premiers éveils."],[HeartHandshake,"Garderie","Jouer, explorer et devenir autonome à son rythme."],[Palette,"Maternelle","Construire les fondamentaux avec joie et créativité."],[GraduationCap,"Primaire","Maîtriser, comprendre et réussir durablement."]] as const;
+const activitiesList = [[Trophy,"Sports","Football, handball et natation"],[Music,"Arts","Musique, danse, dessin et théâtre"],[Bot,"Robotique & Coding","Créer, raisonner et programmer"],[BookOpen,"Clubs de lecture","Lire, partager et imaginer"],[Leaf,"Jardinage","Observer et prendre soin du vivant"],[Sprout,"Élevage","Apprendre par l’expérience"],[Languages,"Langues","S’ouvrir davantage au monde"]] as const;
+const testimonials = [
+  ["Clarisse M.","Parent de Maya, SIL","Ma fille va à l’école avec enthousiasme. Elle s’exprime désormais avec assurance en français comme en anglais."],
+  ["Armand T.","Parent de Léo, CM2","L’accompagnement est sérieux et humain. Les progrès de notre fils dépassent nos attentes."],
+  ["Sandrine N.","Parent d’Ella, Maternelle","L’équipe connaît chaque enfant. Cette attention fait toute la différence pour notre famille."],
+  ["Patrick E.","Parent de Nathan, CE2","Entre les activités, le transport et le niveau scolaire, nous avons trouvé une école vraiment complète."],
+];
+const gallery = [hero,activities,team,bus,activities,hero,bus,team,hero,activities,bus,team,activities,hero,bus];
+
+function HomePage() {
+  const [slide,setSlide] = useState(0); const [more,setMore] = useState(false); const [lightbox,setLightbox] = useState<number|null>(null);
+  useEffect(() => { const id = window.setInterval(() => setSlide(v => (v + 1) % testimonials.length), 5000); return () => window.clearInterval(id); }, []);
+  return <>
+    <section className="overflow-hidden bg-muted">
+      <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 py-14 sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:px-8 lg:py-20">
+        <div className="reveal-up"><p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">École bilingue privée · Japoma</p><h1 className="mt-5 text-4xl font-bold leading-tight text-foreground sm:text-5xl lg:text-6xl">Deux langues pour apprendre. <span className="text-primary">Toute une vie pour grandir.</span></h1><p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">À Angello, vos enfants apprennent deux langues. Mais surtout, ils apprennent à grandir.</p><p className="mt-4 flex items-center gap-2 text-sm font-semibold text-primary"><Trophy className="h-5 w-5 text-secondary"/>100% de réussite au CEP depuis 3 ans</p><div className="mt-8 flex flex-col gap-3 sm:flex-row"><Button asChild size="lg"><Link to="/preinscription">Préinscrire mon enfant<ChevronRight/></Link></Button><Button asChild size="lg" variant="outline"><Link to="/a-propos">Découvrir notre école</Link></Button></div></div>
+        <div className="relative"><div className="absolute -bottom-5 -left-5 h-28 w-28 rounded-xl bg-secondary"/><img src={hero} alt="Élèves d’ANGELLO School dans une cour moderne" width="1600" height="1104" fetchPriority="high" className="relative aspect-[4/3] w-full rounded-xl object-cover shadow-2xl"/><div className="absolute bottom-5 right-5 rounded-lg bg-background/95 px-5 py-4 shadow-lg backdrop-blur"><strong className="block text-2xl text-primary">500+</strong><span className="text-xs text-muted-foreground">élèves épanouis</span></div></div>
+      </div>
+    </section>
+
+    <section className="bg-primary py-12 text-primary-foreground"><div className="mx-auto grid max-w-7xl grid-cols-2 gap-px bg-primary-foreground/15 px-5 sm:px-6 lg:grid-cols-4 lg:px-8">{[[GraduationCap,"500+","Élèves épanouis"],[Trophy,"100%","Réussite au CEP"],[Users,"25","Enseignants qualifiés"],[Bus,"3","Bus haut standing"]].map(([Icon,n,label]) => <div key={label as string} className="bg-primary px-3 py-8 text-center"><Icon className="mx-auto h-7 w-7 text-secondary"/><strong className="mt-3 block font-display text-3xl">{n as string}</strong><span className="mt-1 block text-xs text-primary-foreground/65">{label as string}</span></div>)}</div></section>
+
+    <section className="px-5 py-20 sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl"><SectionHeading eyebrow="Pourquoi Angello ?" title="Ce qui nous distingue" text="L’exigence académique et la chaleur d’une communauté réunies autour de chaque enfant."/><div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">{advantages.map(([Icon,title,text],i) => <article key={title} className="reveal-up rounded-xl border bg-card p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg" style={{animationDelay:`${i*70}ms`}}><div className="grid h-11 w-11 place-items-center rounded-lg bg-gold-soft text-primary"><Icon/></div><h3 className="mt-5 text-xl">{title}</h3><p className="mt-3 text-sm leading-6 text-muted-foreground">{text}</p></article>)}</div></div></section>
+
+    <section className="bg-muted px-5 py-20 sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl"><SectionHeading eyebrow="Nos niveaux" title="Un parcours éducatif complet" text="De ses premiers pas à ses premières grandes réussites, votre enfant avance avec confiance."/><div className="relative grid gap-8 pl-10 md:grid-cols-4 md:gap-5 md:pl-0 md:pt-10"><div className="absolute bottom-6 left-4 top-6 w-0.5 bg-secondary md:left-[12.5%] md:right-[12.5%] md:top-4 md:h-0.5 md:w-auto"/>{levels.map(([Icon,title,text],i)=><article key={title} className="relative rounded-xl bg-card p-6 shadow-md"><span className="absolute -left-[3.15rem] top-4 grid h-8 w-8 place-items-center rounded-full bg-secondary font-bold text-secondary-foreground md:-top-[3.25rem] md:left-1/2 md:-translate-x-1/2">{i+1}</span><Icon className="h-8 w-8 text-primary"/><h3 className="mt-4 text-xl">{title}</h3><p className="mt-2 min-h-12 text-sm leading-6 text-muted-foreground">{text}</p><Link to="/vie-scolaire" className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-primary">En savoir plus<ChevronRight className="h-4 w-4"/></Link></article>)}</div></div></section>
+
+    <section className="px-5 py-20 sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl"><SectionHeading eyebrow="Activités périscolaires" title="Au-delà des cours" text="Des expériences qui éveillent la curiosité, la créativité et l’esprit d’équipe."/><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{activitiesList.map(([Icon,title,text])=><article key={title} className="group rounded-xl border bg-muted p-6 transition-all duration-300 hover:border-secondary hover:bg-card hover:shadow-lg"><Icon className="h-7 w-7 text-primary transition-transform group-hover:scale-110"/><h3 className="mt-4 text-lg">{title}</h3><p className="mt-2 text-sm text-muted-foreground">{text}</p></article>)}</div></div></section>
+
+    <section className="bg-primary px-5 py-20 sm:px-6 lg:px-8"><div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2"><img src={bus} alt="Bus scolaire moderne ANGELLO" loading="lazy" width="1408" height="1008" className="aspect-[4/3] rounded-xl object-cover shadow-xl"/><div className="text-primary-foreground"><p className="text-xs font-bold uppercase tracking-[0.2em] text-secondary">Tranquillité d’esprit</p><h2 className="mt-3 text-3xl font-bold sm:text-4xl">Transport scolaire sécurisé</h2><p className="mt-5 leading-7 text-primary-foreground/70">Chaque trajet est pensé avec le même soin que chaque journée en classe.</p><ul className="mt-7 space-y-4">{["Flotte de 3 bus haut standing","Chauffeurs qualifiés et attentionnés","Couverture étendue à Douala","Sécurité maximale à chaque étape"].map(x=><li key={x} className="flex gap-3"><ShieldCheck className="h-5 w-5 shrink-0 text-secondary"/>{x}</li>)}</ul><Button asChild variant="gold" size="lg" className="mt-8"><a target="_blank" rel="noreferrer" href="https://wa.me/237678509942?text=Bonjour%20ANGELLO%20School%2C%20je%20souhaite%20obtenir%20des%20informations%20sur%20le%20transport%20scolaire.%20Merci.">En savoir plus sur le transport</a></Button></div></div></section>
+
+    <section className="bg-muted px-5 py-20 sm:px-6 lg:px-8"><div className="mx-auto max-w-4xl"><SectionHeading eyebrow="Témoignages" title="Ils nous font confiance"/><div className="relative overflow-hidden rounded-xl bg-card p-8 shadow-lg sm:p-12"><Quote className="absolute right-8 top-7 h-20 w-20 text-gold-soft"/><div className="relative"><p className="font-display text-xl leading-9 sm:text-2xl">“{testimonials[slide][2]}”</p><div className="mt-8"><strong className="text-primary">{testimonials[slide][0]}</strong><p className="text-sm text-muted-foreground">{testimonials[slide][1]}</p></div><div className="mt-8 flex items-center justify-between"><div className="flex gap-2">{testimonials.map((_,i)=><button key={i} aria-label={`Témoignage ${i+1}`} onClick={()=>setSlide(i)} className={`h-2.5 rounded-full transition-all ${i===slide?"w-7 bg-primary":"w-2.5 bg-border"}`}/>)}</div><div className="flex gap-2"><Button variant="outline" size="icon" onClick={()=>setSlide((slide-1+testimonials.length)%testimonials.length)} aria-label="Témoignage précédent"><ArrowLeft/></Button><Button variant="outline" size="icon" onClick={()=>setSlide((slide+1)%testimonials.length)} aria-label="Témoignage suivant"><ArrowRight/></Button></div></div></div></div></div></section>
+
+    <section className="px-5 py-20 sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl"><SectionHeading eyebrow="Galerie" title="La vie à Angello en images"/><div className="columns-1 gap-4 sm:columns-2 lg:columns-3">{gallery.slice(0,more?15:6).map((src,i)=><button key={i} onClick={()=>setLightbox(i)} className="mb-4 block w-full overflow-hidden rounded-lg" aria-label={`Agrandir la photo ${i+1}`}><img src={src} alt={`Moment de vie à ANGELLO School ${i+1}`} loading="lazy" className={`w-full object-cover transition-transform duration-500 hover:scale-105 ${i%3===1?"aspect-square":"aspect-[4/3]"}`}/></button>)}</div>{!more&&<div className="mt-8 text-center"><Button variant="outline" size="lg" onClick={()=>setMore(true)}>Voir plus de photos</Button></div>}</div></section>
+    {lightbox!==null&&<div className="fixed inset-0 z-[70] grid place-items-center bg-foreground/95 p-4" role="dialog" aria-modal="true" aria-label="Galerie en plein écran"><Button variant="light" size="icon" className="absolute right-5 top-5" onClick={()=>setLightbox(null)} aria-label="Fermer"><X/></Button><Button variant="light" size="icon" className="absolute left-5" onClick={()=>setLightbox((lightbox-1+gallery.length)%gallery.length)} aria-label="Photo précédente"><ArrowLeft/></Button><img src={gallery[lightbox]} alt={`Moment de vie ${lightbox+1}`} className="max-h-[85vh] max-w-[82vw] rounded-lg object-contain"/><Button variant="light" size="icon" className="absolute right-5" onClick={()=>setLightbox((lightbox+1)%gallery.length)} aria-label="Photo suivante"><ArrowRight/></Button></div>}
+
+    <section className="bg-gradient-to-r from-primary to-navy-soft px-5 py-20 text-center text-primary-foreground sm:px-6"><div className="mx-auto max-w-3xl"><h2 className="text-3xl font-bold sm:text-5xl">Prêt à rejoindre la famille Angello ?</h2><p className="mt-5 text-lg text-primary-foreground/75">Inscrivez votre enfant dès maintenant et offrez-lui un avenir brillant.</p><div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row"><Button asChild variant="gold" size="lg"><Link to="/preinscription">Préinscrire mon enfant</Link></Button><Button asChild variant="light" size="lg"><a href="/brochure-angello-school.pdf" download>Télécharger la brochure</a></Button></div></div></section>
+  </>;
 }
