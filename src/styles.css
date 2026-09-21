@@ -76,18 +76,19 @@ button, a { -webkit-tap-highlight-color: transparent; }
 }
 @utility whatsapp-pulse { animation: pulse-soft 2.2s infinite; }
 
-.scroll-reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity .75s ease var(--reveal-delay, 0ms), transform .75s cubic-bezier(.2,.7,.2,1) var(--reveal-delay, 0ms);
-}
-.scroll-reveal.is-visible { opacity: 1; transform: translateY(0); }
 .button-highlight { isolation: isolate; }
 .button-highlight:hover { animation: button-glow 1.6s ease-in-out infinite; transform: translateY(-2px); }
 .button-highlight:active { transform: translateY(0) scale(.98); }
 
+@supports (animation-timeline: view()) {
+  main section:not(:first-child), main article {
+    animation: reveal-up linear both;
+    animation-timeline: view();
+    animation-range: entry 5% cover 28%;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-  .scroll-reveal { opacity: 1; transform: none; }
 }
