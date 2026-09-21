@@ -53,7 +53,7 @@ export function ContactMap() {
     }
 
     const script = document.createElement("script");
-    script.dataset.angelloMap = "true";
+    script.dataset["angelloMap"] = "true";
     script.async = true;
     script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&loading=async&callback=initAngelloMap&channel=${encodeURIComponent(channel ?? "angello-school")}`;
     script.onerror = () => setUnavailable(true);

@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteShell } from "../components/site-shell";
+import { ScrollEffects } from "../components/scroll-effects";
 
 function NotFoundComponent() {
   return (
@@ -118,7 +119,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SiteShell><Outlet /></SiteShell>
+      <SiteShell><ScrollEffects/><Outlet /></SiteShell>
     </QueryClientProvider>
   );
 }

@@ -66,6 +66,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 @keyframes reveal-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes shimmer { from { transform: translateX(-120%); } to { transform: translateX(120%); } }
 @keyframes pulse-soft { 0%,100% { transform: scale(1); box-shadow: 0 0 0 0 color-mix(in oklab, var(--whatsapp) 42%, transparent); } 50% { transform: scale(1.04); box-shadow: 0 0 0 12px transparent; } }
+@keyframes button-glow { 0%,100% { box-shadow: 0 8px 20px color-mix(in oklab, var(--primary) 14%, transparent); } 50% { box-shadow: 0 10px 28px color-mix(in oklab, var(--secondary) 34%, transparent); } }
 
 @utility reveal-up { animation: reveal-up .7s both; }
 @utility shimmer-button {
@@ -75,7 +76,18 @@ button, a { -webkit-tap-highlight-color: transparent; }
 }
 @utility whatsapp-pulse { animation: pulse-soft 2.2s infinite; }
 
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .75s ease var(--reveal-delay, 0ms), transform .75s cubic-bezier(.2,.7,.2,1) var(--reveal-delay, 0ms);
+}
+.scroll-reveal.is-visible { opacity: 1; transform: translateY(0); }
+.button-highlight { isolation: isolate; }
+.button-highlight:hover { animation: button-glow 1.6s ease-in-out infinite; transform: translateY(-2px); }
+.button-highlight:active { transform: translateY(0) scale(.98); }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .scroll-reveal { opacity: 1; transform: none; }
 }

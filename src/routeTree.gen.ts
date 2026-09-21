@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AProposRouteImport } from './routes/a-propos'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as PreinscriptionRouteImport } from './routes/preinscription'
 import { Route as VieScolaireRouteImport } from './routes/vie-scolaire'
 
@@ -22,6 +23,11 @@ const IndexRoute = IndexRouteImport.update({
 const AProposRoute = AProposRouteImport.update({
   id: '/a-propos',
   path: '/a-propos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PreinscriptionRoute = PreinscriptionRouteImport.update({
@@ -38,12 +44,14 @@ const VieScolaireRoute = VieScolaireRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
+  '/contact': typeof ContactRoute
   '/preinscription': typeof PreinscriptionRoute
   '/vie-scolaire': typeof VieScolaireRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
+  '/contact': typeof ContactRoute
   '/preinscription': typeof PreinscriptionRoute
   '/vie-scolaire': typeof VieScolaireRoute
 }
@@ -51,20 +59,29 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
+  '/contact': typeof ContactRoute
   '/preinscription': typeof PreinscriptionRoute
   '/vie-scolaire': typeof VieScolaireRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/a-propos' | '/preinscription' | '/vie-scolaire'
+  fullPaths:
+    '/' | '/a-propos' | '/contact' | '/preinscription' | '/vie-scolaire'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/a-propos' | '/preinscription' | '/vie-scolaire'
-  id: '__root__' | '/' | '/a-propos' | '/preinscription' | '/vie-scolaire'
+  to: '/' | '/a-propos' | '/contact' | '/preinscription' | '/vie-scolaire'
+  id:
+    | '__root__'
+    | '/'
+    | '/a-propos'
+    | '/contact'
+    | '/preinscription'
+    | '/vie-scolaire'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AProposRoute: typeof AProposRoute
+  ContactRoute: typeof ContactRoute
   PreinscriptionRoute: typeof PreinscriptionRoute
   VieScolaireRoute: typeof VieScolaireRoute
 }
@@ -83,6 +100,13 @@ declare module '@tanstack/react-router' {
       path: '/a-propos'
       fullPath: '/a-propos'
       preLoaderRoute: typeof AProposRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/preinscription': {
@@ -105,6 +129,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AProposRoute: AProposRoute,
+  ContactRoute: ContactRoute,
   PreinscriptionRoute: PreinscriptionRoute,
   VieScolaireRoute: VieScolaireRoute,
 }
