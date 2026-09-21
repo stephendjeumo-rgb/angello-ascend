@@ -13,7 +13,7 @@ declare global {
   }
 }
 
-const schoolPosition = { lat: 4.0066, lng: 9.8149 };
+const schoolPosition = { lat: 4.0385667, lng: 9.8105731 };
 
 export function ContactMap() {
   const mapRef = useRef<HTMLDivElement>(null);
