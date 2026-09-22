@@ -63,7 +63,7 @@ body { margin: 0; background: var(--background); color: var(--foreground); font-
 h1, h2, h3, h4 { font-family: var(--font-display); }
 button, a { -webkit-tap-highlight-color: transparent; }
 
-@keyframes reveal-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes reveal-up { from { opacity: 0; transform: translateY(42px) scale(.975); filter: blur(5px); } to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
 @keyframes shimmer { from { transform: translateX(-120%); } to { transform: translateX(120%); } }
 @keyframes pulse-soft { 0%,100% { transform: scale(1); box-shadow: 0 0 0 0 color-mix(in oklab, var(--whatsapp) 42%, transparent); } 50% { transform: scale(1.04); box-shadow: 0 0 0 12px transparent; } }
 @keyframes button-glow { 0%,100% { box-shadow: 0 8px 20px color-mix(in oklab, var(--primary) 14%, transparent); } 50% { box-shadow: 0 10px 28px color-mix(in oklab, var(--secondary) 34%, transparent); } }
@@ -77,18 +77,28 @@ button, a { -webkit-tap-highlight-color: transparent; }
 @utility whatsapp-pulse { animation: pulse-soft 2.2s infinite; }
 
 .button-highlight { isolation: isolate; }
-.button-highlight:hover { animation: button-glow 1.6s ease-in-out infinite; transform: translateY(-2px); }
+.button-highlight:hover { animation: button-glow 1.25s ease-in-out infinite; transform: translateY(-3px) scale(1.02); }
 .button-highlight:active { transform: translateY(0) scale(.98); }
 
-@supports (animation-timeline: view()) {
-  main section:not(:first-child), main article {
-    animation: reveal-up linear both;
-    animation-timeline: view();
-    animation-range: entry 5% cover 28%;
-  }
+.scroll-stage { opacity: 0; transform: translateY(42px) scale(.975); filter: blur(5px); transition: opacity .75s ease, transform .85s cubic-bezier(.2,.75,.2,1), filter .65s ease; transition-delay: calc(var(--reveal-order, 0) * 55ms); }
+.scroll-stage.is-visible { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+.scroll-stage:not(.is-visible) { transition-duration: .45s; }
+.stat-tile.is-visible svg { animation: stat-pop .65s .25s both; }
+.stat-tile.is-visible strong { animation: stat-rise .8s .15s both; }
+@keyframes stat-pop { 0% { transform: scale(.4) rotate(-12deg); opacity: 0; } 70% { transform: scale(1.16) rotate(4deg); } 100% { transform: scale(1) rotate(0); opacity: 1; } }
+@keyframes stat-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.journey-fill { bottom: auto; height: calc((100% - 3rem) * var(--journey-progress, 0)); transition: height .12s linear; }
+.journey-step { transition: transform .45s ease, box-shadow .45s ease, opacity .45s ease; }
+.journey-number { box-shadow: 0 0 0 5px var(--muted); transition: transform .45s ease, box-shadow .45s ease; }
+.journey-step.is-visible .journey-number { box-shadow: 0 0 0 5px var(--muted), 0 0 22px color-mix(in oklab, var(--secondary) 55%, transparent); }
+.fee-card:hover { transform: translateY(-5px); box-shadow: 0 16px 30px color-mix(in oklab, var(--primary) 10%, transparent); }
+
+@media (min-width: 768px) {
+  .journey-fill { bottom: auto; right: auto; width: calc(75% * var(--journey-progress, 0)); height: .125rem; transition: width .12s linear; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .scroll-stage { opacity: 1; transform: none; filter: none; }
 }
