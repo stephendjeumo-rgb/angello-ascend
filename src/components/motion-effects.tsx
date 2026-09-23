@@ -23,14 +23,15 @@ export function MotionEffects() {
       return;
     }
 
-    observer = new IntersectionObserver(
+    const revealObserver = new IntersectionObserver(
       (entries) => entries.forEach((entry) => entry.target.classList.toggle("is-visible", entry.isIntersecting)),
       { threshold: 0.12, rootMargin: "-4% 0px -8%" },
     );
-    revealTargets.forEach((target) => observer.observe(target));
+    observer = revealObserver;
+    revealTargets.forEach((target) => revealObserver.observe(target));
 
     const counters = Array.from(document.querySelectorAll<HTMLElement>("[data-count]"));
-    countObserver = new IntersectionObserver(
+    const counterObserver = new IntersectionObserver(
       (entries) => entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         const element = entry.target as HTMLElement;
@@ -45,11 +46,12 @@ export function MotionEffects() {
           if (progress < 1) requestAnimationFrame(tick);
         };
         requestAnimationFrame(tick);
-        countObserver.unobserve(element);
+        counterObserver.unobserve(element);
       }),
       { threshold: 0.65 },
     );
-    counters.forEach((counter) => countObserver.observe(counter));
+    countObserver = counterObserver;
+    counters.forEach((counter) => counterObserver.observe(counter));
 
     journey = document.querySelector<HTMLElement>("[data-journey]");
     updateJourney = () => {
