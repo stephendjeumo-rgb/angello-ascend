@@ -5,8 +5,14 @@ export function MotionEffects() {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
 
   useEffect(() => {
+    let observer: IntersectionObserver | undefined;
+    let countObserver: IntersectionObserver | undefined;
+    let journey: HTMLElement | null = null;
+    let updateJourney: (() => void) | undefined;
+    let revealTargets: HTMLElement[] = [];
+    const frame = window.requestAnimationFrame(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const revealTargets = Array.from(document.querySelectorAll<HTMLElement>("main section, main article, [data-reveal]"));
+    revealTargets = Array.from(document.querySelectorAll<HTMLElement>("main section, main article, [data-reveal]"));
     revealTargets.forEach((target, index) => {
       target.classList.add("scroll-stage");
       target.style.setProperty("--reveal-order", String(index % 4));
@@ -17,14 +23,14 @@ export function MotionEffects() {
       return;
     }
 
-    const observer = new IntersectionObserver(
+    observer = new IntersectionObserver(
       (entries) => entries.forEach((entry) => entry.target.classList.toggle("is-visible", entry.isIntersecting)),
       { threshold: 0.12, rootMargin: "-4% 0px -8%" },
     );
     revealTargets.forEach((target) => observer.observe(target));
 
     const counters = Array.from(document.querySelectorAll<HTMLElement>("[data-count]"));
-    const countObserver = new IntersectionObserver(
+    countObserver = new IntersectionObserver(
       (entries) => entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         const element = entry.target as HTMLElement;
@@ -45,8 +51,8 @@ export function MotionEffects() {
     );
     counters.forEach((counter) => countObserver.observe(counter));
 
-    const journey = document.querySelector<HTMLElement>("[data-journey]");
-    const updateJourney = () => {
+    journey = document.querySelector<HTMLElement>("[data-journey]");
+    updateJourney = () => {
       if (!journey) return;
       const rect = journey.getBoundingClientRect();
       const distance = window.innerHeight + rect.height;
@@ -55,11 +61,17 @@ export function MotionEffects() {
     };
     updateJourney();
     window.addEventListener("scroll", updateJourney, { passive: true });
+    });
 
     return () => {
-      observer.disconnect();
-      countObserver.disconnect();
-      window.removeEventListener("scroll", updateJourney);
+      window.cancelAnimationFrame(frame);
+      observer?.disconnect();
+      countObserver?.disconnect();
+      if (updateJourney) window.removeEventListener("scroll", updateJourney);
+      revealTargets.forEach((target) => {
+        target.classList.remove("scroll-stage", "is-visible");
+        target.style.removeProperty("--reveal-order");
+      });
     };
   }, [pathname]);
 
