@@ -10,7 +10,7 @@ export function MotionEffects() {
     let journey: HTMLElement | null = null;
     let updateJourney: (() => void) | undefined;
     let revealTargets: HTMLElement[] = [];
-    const frame = window.requestAnimationFrame(() => {
+    const timer = window.setTimeout(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     revealTargets = Array.from(document.querySelectorAll<HTMLElement>("main section, main article, [data-reveal]"));
     revealTargets.forEach((target, index) => {
@@ -63,10 +63,10 @@ export function MotionEffects() {
     };
     updateJourney();
     window.addEventListener("scroll", updateJourney, { passive: true });
-    });
+    }, 250);
 
     return () => {
-      window.cancelAnimationFrame(frame);
+      window.clearTimeout(timer);
       observer?.disconnect();
       countObserver?.disconnect();
       if (updateJourney) window.removeEventListener("scroll", updateJourney);
